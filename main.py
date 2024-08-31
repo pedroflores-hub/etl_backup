@@ -20,30 +20,30 @@ s3_client = boto3.client(
     region_name=AWS_REGION
 )
 
-def listar_arquivos(pasta: str) -> List[str]:
-    """Lista todos os arquivos em uma pasta local."""
-    arquivos: List[str] = []
+def listar_arquivos(pasta):
+    
+    arquivos = []
     for nome_arquivo in os.listdir(pasta):
         caminho_completo = os.path.join(pasta, nome_arquivo)
         if os.path.isfile(caminho_completo):
             arquivos.append(caminho_completo)
     return arquivos
 
-def upload_arquivos_para_s3(arquivos: List[str]) -> None:
-    """Faz upload dos arquivos listados para o S3."""
+def upload_arquivos_para_s3(arquivos):
+    
     for arquivo in arquivos:
         nome_arquivo: str = os.path.basename(arquivo)
         s3_client.upload_file(arquivo, BUCKET_NAME, nome_arquivo)
         print(f'{nome_arquivo} foi enviado para o S3.')
 
-def deletar_arquivos_locais(arquivos: List[str]) -> None:
-    """Deleta os arquivos locais após o upload."""
+def deletar_arquivos_locais(arquivos):
+    
     for arquivo in arquivos:
         os.remove(arquivo)
         print(f'{arquivo} foi deletado do local.')
 
-def executar_backup(pasta: str) -> None:
-    """Executa o processo completo de backup."""
+def executar_backup(pasta):
+    
     arquivos: List[str] = listar_arquivos(pasta)
     if arquivos:
         upload_arquivos_para_s3(arquivos)
